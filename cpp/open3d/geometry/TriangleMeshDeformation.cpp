@@ -106,6 +106,9 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
     solver.factorize(L);
     std::cout << "solver status: " << static_cast<int>(solver.info())
               << std::endl;
+    std::cout << "solver last error: " << solver.lastErrorMessage()
+              << std::endl;
+
     if (solver.info() != Eigen::Success) {
         utility::LogError("Failed to build solver (factorize)");
     } else {
