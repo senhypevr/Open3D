@@ -93,9 +93,13 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
     Eigen::SparseMatrix<double> L(vertices_.size(), vertices_.size());
     L.setFromTriplets(triplets.begin(), triplets.end());
     for (size_t i = 0; i < vertices_.size(); ++i) {
-        L.coeffRef(i, i) += 0.00001;
+        for (size_t j = 0; j < vertices_.size(); ++j) {
+            L.coeffRef(i, j) += 0.00001;
+        }
     }
-    std::cout << "L matrix size: " << L.cols() << " " << L.rows() << std::endl;
+
+    std::cout << "L matrix after added 0.00001: " << L.cols() << " " << L.rows()
+              << std::endl;
 
     utility::LogDebug(
             "[DeformAsRigidAsPossible] done setting up system matrix L");
