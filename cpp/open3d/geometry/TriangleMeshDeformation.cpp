@@ -94,8 +94,10 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
 
     Eigen::SparseMatrix<double> L(vertices_.size(), vertices_.size());
     L.setFromTriplets(triplets.begin(), triplets.end());
-
-    // std::cout << "L: " << L << std::endl;
+    for (size_t i = 0; i < vertices_.size(); ++i) {
+        L.coeffRef(i, i) += 0.0000001;
+    }
+    std::cout << "L size: " << L.cols() << " " << L.rows() << std::endl;
 
     utility::LogDebug(
             "[DeformAsRigidAsPossible] done setting up system matrix L");
@@ -109,9 +111,6 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
               << std::endl;
     std::cout << "solver last error: " << solver.lastErrorMessage()
               << std::endl;
-    for (size_t i = 0; i < vertices_.size(); ++i) {
-        L.coeffRef(i, i) += 0.0000001;
-    }
 
     if (solver.info() != Eigen::Success) {
         utility::LogError("Failed to build solver (factorize)");
