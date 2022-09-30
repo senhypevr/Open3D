@@ -104,10 +104,14 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
     Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
     solver.analyzePattern(L);
     solver.factorize(L);
+
     std::cout << "solver status: " << static_cast<int>(solver.info())
               << std::endl;
     std::cout << "solver last error: " << solver.lastErrorMessage()
               << std::endl;
+    for (size_t i = 0; i < vertices_.size(); ++i) {
+        L.coeffRef(i, i) += 0.0000001;
+    }
 
     if (solver.info() != Eigen::Success) {
         utility::LogError("Failed to build solver (factorize)");
