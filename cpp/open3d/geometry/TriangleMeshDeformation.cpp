@@ -81,13 +81,11 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
             double W = 0;
             for (int j : prime->adjacency_list_[i]) {
                 double w = edge_weights[GetOrderedEdge(i, j)];
-                triplets.push_back(Eigen::Triplet<double>(
-                        i + 0.000001, j + 0.000001, -w + 0.000001));
+                triplets.push_back(Eigen::Triplet<double>(i, j, -w));
                 W += w;
             }
             if (W > 0) {
-                triplets.push_back(Eigen::Triplet<double>(
-                        i + 0.000001, i + 0.000001, W + 0.000001));
+                triplets.push_back(Eigen::Triplet<double>(i, i, W));
             }
         }
     }
@@ -95,9 +93,9 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
     Eigen::SparseMatrix<double> L(vertices_.size(), vertices_.size());
     L.setFromTriplets(triplets.begin(), triplets.end());
     for (size_t i = 0; i < vertices_.size(); ++i) {
-        L.coeffRef(i, i) += 0.0000001;
+        L.coeffRef(i, i) += 0.00001;
     }
-    std::cout << "L size: " << L.cols() << " " << L.rows() << std::endl;
+    std::cout << "L matrix size: " << L.cols() << " " << L.rows() << std::endl;
 
     utility::LogDebug(
             "[DeformAsRigidAsPossible] done setting up system matrix L");
