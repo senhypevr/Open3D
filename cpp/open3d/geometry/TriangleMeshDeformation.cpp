@@ -91,7 +91,7 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
         }
     }
 
-    std::ofstream fs("/hdd/matrix.txt");
+    std::ofstream fs("/hdd/matrix.txt", std::ios::trunc);
     for (auto triplet : triplets) {
         fs << triplet.row() << " " << triplet.col() << " " << triplet.value()
            << std::endl;
@@ -101,12 +101,12 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
 
     Eigen::SparseMatrix<double> L(vertices_.size(), vertices_.size());
     L.setFromTriplets(triplets.begin(), triplets.end());
-    for (size_t i = 0; i < vertices_.size(); ++i) {
-        L.coeffRef(i, i) += 0.01;
-    }
+    // for (size_t i = 0; i < vertices_.size(); ++i) {
+    //     L.coeffRef(i, i) += 0.01;
+    // }
 
-    std::cout << "L matrix after added 0.0000001: " << L.cols() << " "
-              << L.rows() << std::endl;
+    // std::cout << "L matrix after added 0.0000001: " << L.cols() << " "
+    //           << L.rows() << std::endl;
 
     utility::LogDebug(
             "[DeformAsRigidAsPossible] done setting up system matrix L");
