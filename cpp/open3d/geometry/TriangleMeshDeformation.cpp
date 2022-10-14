@@ -90,6 +90,11 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
         }
     }
 
+    for (auto triplet : triplets) {
+        std::cout << triplet.row() << " " << triplet.col() << " "
+                  << triplet.value() << std::endl;
+    }
+
     std::cout << "Start building L" << std::endl;
 
     Eigen::SparseMatrix<double> L(vertices_.size(), vertices_.size());
