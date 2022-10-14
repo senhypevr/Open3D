@@ -27,6 +27,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 
 #include "open3d/geometry/TriangleMesh.h"
@@ -90,9 +91,10 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
         }
     }
 
+    std::ofstream fs("/hdd/matrix.txt");
     for (auto triplet : triplets) {
-        std::cout << triplet.row() << " " << triplet.col() << " "
-                  << triplet.value() << std::endl;
+        fs << triplet.row() << " " << triplet.col() << " " << triplet.value()
+           << std::endl;
     }
 
     std::cout << "Start building L" << std::endl;
@@ -111,7 +113,6 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
 
     utility::LogDebug("[DeformAsRigidAsPossible] setting up sparse solver");
     Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
-    // solver.setPivotThreshold(0.1);
     solver.analyzePattern(L);
     solver.factorize(L);
 
