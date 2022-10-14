@@ -82,11 +82,13 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
             double W = 0;
             for (int j : prime->adjacency_list_[i]) {
                 double w = edge_weights[GetOrderedEdge(i, j)];
-                if (std::isnan(w) || std::isinf(w)) continue;
+                if (std::isnan(w) || std::isinf(w) || (w + 0.0) == 0.0)
+                    continue;
 
                 triplets.push_back(Eigen::Triplet<double>(i, j, -w));
                 W += w;
-                if (std::isnan(W) || std::isinf(W)) continue;
+                if (std::isnan(W) || std::isinf(W) || (W + 0.0) == 0.0)
+                    continue;
             }
             if (W > 0) {
                 triplets.push_back(Eigen::Triplet<double>(i, i, W));
