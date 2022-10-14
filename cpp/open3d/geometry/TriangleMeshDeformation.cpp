@@ -94,9 +94,9 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
 
     Eigen::SparseMatrix<double> L(vertices_.size(), vertices_.size());
     L.setFromTriplets(triplets.begin(), triplets.end());
-    // for (size_t i = 0; i < vertices_.size(); ++i) {
-    //     L.coeffRef(i, i) += 0.0000001;
-    // }
+    for (size_t i = 0; i < vertices_.size(); ++i) {
+        L.coeffRef(i, i) += 0.01;
+    }
 
     std::cout << "L matrix after added 0.0000001: " << L.cols() << " "
               << L.rows() << std::endl;
@@ -106,7 +106,7 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
 
     utility::LogDebug("[DeformAsRigidAsPossible] setting up sparse solver");
     Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
-    solver.setPivotThreshold(0.1);
+    // solver.setPivotThreshold(0.1);
     solver.analyzePattern(L);
     solver.factorize(L);
 
