@@ -82,8 +82,9 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
             double W = 0;
             for (int j : prime->adjacency_list_[i]) {
                 double w = edge_weights[GetOrderedEdge(i, j)];
-                if (std::isnan(w) || std::isinf(w) || (w + 0.0) == 0.0)
+                if (std::isnan(w) || std::isinf(w) || (w + 0.0) == 0.0) {
                     continue;
+                }
 
                 triplets.push_back(Eigen::Triplet<double>(i, j, -w));
                 W += w;
@@ -93,6 +94,7 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
             if (W > 0) {
                 triplets.push_back(Eigen::Triplet<double>(i, i, W));
             }
+            // triplets.push_back(Eigen::Triplet<double>(i, i, 0.000001));
         }
     }
 
@@ -118,8 +120,8 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
 
     utility::LogDebug("[DeformAsRigidAsPossible] setting up sparse solver");
     Eigen::SparseLU<Eigen::SparseMatrix<double>> solver;
-    solver.analyzePattern(L);
-    solver.factorize(L);
+    // solver.analyzePattern(L);
+    // solver.factorize(L);
 
     std::cout << "solver pivot thresh 0.01" << std::endl;
     std::cout << "solver status: " << static_cast<int>(solver.info())
