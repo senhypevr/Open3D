@@ -129,12 +129,12 @@ std::shared_ptr<TriangleMesh> TriangleMesh::DeformAsRigidAsPossible(
     std::cout << "solver last error: " << solver.lastErrorMessage()
               << std::endl;
 
-    if (solver.info() != Eigen::Success) {
-        utility::LogError("Failed to build solver (factorize)");
-    } else {
-        utility::LogDebug(
-                "[DeformAsRigidAsPossible] done setting up sparse solver");
-    }
+    // if (solver.info() != Eigen::Success) {
+    //     utility::LogError("Failed to build solver (factorize)");
+    // } else {
+    //     utility::LogDebug(
+    //             "[DeformAsRigidAsPossible] done setting up sparse solver");
+    // }
 
     std::vector<Eigen::VectorXd> b = {Eigen::VectorXd(vertices_.size()),
                                       Eigen::VectorXd(vertices_.size()),
